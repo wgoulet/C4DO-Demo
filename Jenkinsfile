@@ -18,6 +18,14 @@ pipeline
 
         string(name: 'VAULT_PICKUP_URL', defaultValue: 'https://vault.thehotelcook.com:8200/v1/venafi-pki/cert/', description: 'Enter the URL for the Venafi Vault secrets engine.')
     }
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('example_aws_access_key')
+        AWS_SECRET_ACCESS_KEY = credentials('example_aws_secret_key')
+        AWS_DEFAULT_REGION    = "us-west-2"
+    }
+    options {
+        timeout(time: 1, unit: "HOURS")
+    }
     stages{
         stage('Stop existing test container and remove if it exists') {
             agent
