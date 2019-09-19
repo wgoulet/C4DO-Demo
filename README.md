@@ -5,11 +5,12 @@ This demo application demonstrates how TLS certificates can be requested from Ve
 This demo builds a Docker container that serves a static webpage secured with a TLS certificate that is requested when the container is started.
 
 These instructions were tested on Ubuntu 18.04.3 LTS with the following Docker version installed:
+
     Client:
     Version:           18.09.7
     API version:       1.39
     Go version:        go1.10.1
-     Git commit:        2d0083d
+    Git commit:        2d0083d
     Built:             Fri Aug 16 14:20:06 2019
     OS/Arch:           linux/amd64
     Experimental:      false
