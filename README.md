@@ -30,6 +30,7 @@ To build the demo, clone the repo and execute the following command replacing <i
     sudo docker build -t <image name> .
     
 Once the container is built, you can deploy it locally with the following command (this assumes that docker is running as root and is able to bind to port 443 on your system; do not use this configuration for production use):
+    
     sudo docker run --name some-nginx -d -p 443:443 <container image name> <FQDN to embed in certifiate> <API key for Vault> <URL for the PKI backend that was configured with the Venafi Vault secrets engine for Hashi> <URL for retrieving certificates from the Vault instance>
     
 You should now be able to connect to your system via https://localhost and see the demo web app after accepting the certificate exception. If you have deployed your container to a server that is publicly visible, you can create a DNS record that contains the FQDN you embedded in the certificate.
