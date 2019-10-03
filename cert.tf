@@ -57,7 +57,11 @@ output "cert_private_key" {
 
 resource "null_resource" "create-p12" {
     provisioner "local-exec" {
-        command = "openssl pkcs12 -export -in '${local_file.chain.filename}' -inkey '${local_file.privatekey.filename}' -passin pass:\"${var.passphrase}\" -password pass:\"${var.passphrase}\" -out ./tcert.p12"
+        command = "openssl pkcs12 -export -in '${local_file.chain.filename}' -inkey '${local_file.privatekey.filename}' -passin pass:\"${var.passphrase}\" -password pass:\"${var.passphrase}\" -out ${path.module}/tcert.p12"
     }
 }
 
+resource "local_file" "b64p12"{
+    content = filebase64("${path.module}/tcert.p12")
+    filename = "${path.module}/tcertp12.b64"
+}
