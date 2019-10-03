@@ -61,7 +61,16 @@ resource "null_resource" "create-p12" {
     }
 }
 
-resource "local_file" "b64p12"{
-    content = filebase64("${path.module}/tcert.p12")
-    filename = "${path.module}/tcertp12.b64"
+resource "null_resource" "create-b64p12" {
+    depends_on = ["null_resource.create-p12"]
+    provisioner "local-exec" {
+	command = "base64 ${path.module}/tcert.p12 > ${path.module}/tcertp12.b64"
+    }
+
 }
+
+#resource "local_file" "b64p12"{
+#    depends_on = ["null_resource.create-p12"]
+#    content = filebase64("${path.module}/tcert.p12")
+#    filename = "${path.module}/tcertp12.b64"
+#}
