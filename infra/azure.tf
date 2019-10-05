@@ -76,7 +76,7 @@ resource "azurerm_application_gateway" "demoapps" {
 
     trusted_root_certificate {
        	  name = "beroot"
-          data = file("${path.module}/cacerts.pem")
+          data = file("${path.module}/../internalca.pem")
     }
 
     frontend_ip_configuration {
@@ -107,7 +107,7 @@ resource "azurerm_application_gateway" "demoapps" {
     ssl_certificate {
         name = "ssl_pubcert"
         password = "${var.certpass}"
-        data = file("${path.module}/tcertp12.b64")
+        data = file("${path.module}/../tcertp12.b64")
     }
 
     request_routing_rule {
