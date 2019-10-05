@@ -42,6 +42,11 @@ resource "local_file" "chain" {
     filename = "${path.module}/certs.pem"
 }
 
+resource "local_file" "cacerts" {
+    content = "${venafi_certificate.webserver.chain}"
+    filename = "${path.module}/azurelbupdate/cacerts.pem"
+}
+
 output "cert_certificate" {
     value = "${venafi_certificate.webserver.certificate}"
 }
@@ -56,6 +61,9 @@ output "cert_private_key" {
 }
 
 resource "null_resource" "create-p12" {
+    triggers = {
+        cert_key = "${venafi_certificate.webserver.private_key_pem}"
+    }
     provisioner "local-exec" {
         command = "openssl pkcs12 -export -in '${local_file.chain.filename}' -inkey '${local_file.privatekey.filename}' -passin pass:\"${var.passphrase}\" -password pass:\"${var.passphrase}\" -out ${path.module}/tcert.p12"
     }
@@ -63,14 +71,12 @@ resource "null_resource" "create-p12" {
 
 resource "null_resource" "create-b64p12" {
     depends_on = ["null_resource.create-p12"]
+    triggers = {
+        cert_key = "${venafi_certificate.webserver.private_key_pem}"
+    }
     provisioner "local-exec" {
-	command = "base64 ${path.module}/tcert.p12 > ${path.module}/tcertp12.b64"
+	command = "base64 ${path.module}/tcert.p12 > ${path.module}/azurelbupdate/tcertp12.b64"
     }
 
 }
 
-#resource "local_file" "b64p12"{
-#    depends_on = ["null_resource.create-p12"]
-#    content = filebase64("${path.module}/tcert.p12")
-#    filename = "${path.module}/tcertp12.b64"
-#}
